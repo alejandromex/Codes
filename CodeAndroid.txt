@@ -1,0 +1,98 @@
+package com.example.airclenear;
+
+import androidx.appcompat.app.AppCompatActivity;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.utils.ColorTemplate;
+import java.util.ArrayList;
+
+public class MainActivity extends AppCompatActivity {
+
+    private ProgressBar pbar;
+    private  ProgressBar co2bar;
+    private TextView ppm;
+    PieChart pieChart;
+    PieData pieData;
+    PieDataSet pieDataSet;
+    ArrayList pieEntries;
+    private TextView txtEstatus;
+    private String estado;
+    private String estadoCo2;
+    private TextView labelco;
+    int calidadAire;
+    int co2;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        pieChart = findViewById(R.id.PieChart);
+        labelco = findViewById(R.id.labelco2);
+        co2bar = findViewById(R.id.progressBarco2);
+        ppm = findViewById(R.id.labelPpm);
+        getEntries();
+        pieDataSet = new PieDataSet(pieEntries, "");
+        pieData = new PieData(pieDataSet);
+        pieChart.setData(pieData);
+        pieDataSet.setColors(ColorTemplate.JOYFUL_COLORS);
+        pieDataSet.setSliceSpace(2f);
+        pieDataSet.setValueTextColor(Color.WHITE);
+        pieDataSet.setValueTextSize(10f);
+        pieDataSet.setSliceSpace(5f);
+        txtEstatus = findViewById(R.id.txtEstatus);
+        pbar = findViewById(R.id.progressBar);
+        ppm.setText("Ppm:" +calidadAire+"\n"+estado);
+        pbar.setProgress(calidadAire);
+        if(calidadAire>80)
+        {
+            txtEstatus.setText("Calidad De Aire Adecuada");
+        }
+        else{
+            txtEstatus.setText("Calidad de Aire con alto nivel de contaminacion");
+        }
+        labelco.setText("CO2:"+co2+"\n"+estadoCo2);
+        co2bar.setProgress(co2);
+        labelco.setTextColor(Color.YELLOW);
+        ppm.setTextColor(Color.rgb(234,137,154));
+    }
+
+
+
+    private void getEntries() {
+        calidadAire = (int)(Math.random()*100+1);
+        co2 = (int)(Math.random()*100+1);
+        pieEntries = new ArrayList<>();
+        pieEntries.add(new PieEntry(calidadAire, 0));
+        pieEntries.add(new PieEntry(co2, 1));
+        if(calidadAire<30)
+        {
+            estado = "Mal";
+        }
+        if(calidadAire>=30 && calidadAire<=60)
+        {
+            estado ="Regular";
+        }
+        if(calidadAire>60)
+        {
+            estado="Bien";
+        }
+        if(co2<30)
+        {
+            estadoCo2 = "Mal";
+        }
+        if(co2>=30 && co2<=60)
+        {
+            estadoCo2 ="Regular";
+        }
+        if(co2>60)
+        {
+            estadoCo2="Bien";
+        }
+
+    }
+}
